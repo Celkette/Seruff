@@ -1,19 +1,20 @@
 PROG	= push_swap
 
-SRCS    = 	push_swap.c \
-        	push_swap_2.c \
-			push.c \
-			swap.c \
-			rotate.c \
-			rev_rotate.c \
-			utils_algo_1.c \
-			utils_algo_2.c \
-			utils_algo_3.c \
-          	utils_arg_1.c \
-			utils_arg_2.c \
-			utils_list_1.c \
-			utils_list_2.c \
-			utils_list_3.c 
+SRCS    = 	push_swap.c	\
+        	push_swap_2.c	\
+		main.c		\
+		push.c		\
+		swap.c		\
+		rotate.c	\
+		rev_rotate.c	\
+		utils_algo_1.c	\
+		utils_algo_2.c	\
+		utils_algo_3.c	\
+          	utils_arg_1.c	\
+		utils_arg_2.c	\
+		utils_list_1.c	\
+		utils_list_2.c	\
+		utils_list_3.c 
 
 OBJS 	= ${SRCS:.c=.o}
 MAIN	= push_swap.c 
