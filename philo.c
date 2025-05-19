@@ -305,12 +305,12 @@ void init_philo(t_table *table)
 	while (i < table->philo_nb)
 	{
 		table->philo[i].id = i + 1; // Initialisation de l'ID du philosophe
-		table->philo[i].fork = i;  // Initialisation de l'index de la fourchette droite = index du philo
-		table->philo[i].r_fork = i;
+		
+		table->philo[i].r_fork = &table->fork[i];
 		if (i == 0)
-			table->philo[i].l_fork = table->philo_nb - 1;
+			table->philo[i].l_fork = &table->fork[table->philo_nb - 1];
 		else
-			table->philo[i].l_fork = i - 1;
+			table->philo[i].l_fork = &table->fork[i - 1];
 		table->philo[i].h_last_meal = 0;
 		table->philo[i].t_since_last_meal = 0;
 		table->philo[i].h_of_die = 2000000000000;// Initialisation de l'heure de mort
@@ -386,6 +386,7 @@ void init_other_mutex(t_table *table)
 		error_free_msg("Error: init_flag_thread_mutex failed", table);
 	if (pthread_mutex_init(&table->death_mutex, NULL))//init death_mutex
 		error_free_msg("Error: init_death_mutex failed", table);
+		
 }
 /***************************************
 *        Initialisation simulation     *
@@ -398,8 +399,8 @@ t_table *init_simulation(int argc, char **argv)
 	t_table *table;
 	table = init_table(argc, argv);//initialise la structure table
 	alloc_other(table);//allocation memoire pour structure philo et mutex thread + fork
-	init_philo(table);//initialise la structure philo
 	init_forks(table);//Creer les mutex des fourchettes
+	init_philo(table);//initialise la structure philo
 	init_print(table);//Creer le mutex du print
 	init_other_mutex(table);//Creer le mutex du nombre de repas pris
 	return (table);
@@ -436,7 +437,7 @@ t_table *init_simulation(int argc, char **argv)
 //imprime "has taken a fork"
 int take_forks(t_table *table, t_philo *philo)
 {
-	int first;
+	/*int first;
 	int second;
 	if (table->philo_nb == 1)
 	{
@@ -454,28 +455,50 @@ int take_forks(t_table *table, t_philo *philo)
 		first = philo->l_fork;
 		second = philo->r_fork;
 	}
-	pthread_mutex_lock(&table->fork[first]);//verrouille la fourchette dt;
+	if (first == second)
+	{
+    	pthread_mutex_lock(&table->fork[first]);
+    	display_msg("Error: right fork = left fork", table, philo);
+		return (1);
+	}*/
+	if (table->philo_nb % 2 == 0)//si nb philo pair
+	{
+		pthread_mutex_lock(philo->l_fork);
+		display_msg(table, philo, "has taken a fork");
+		pthread_mutex_lock(philo->r_fork);
+		display_msg(table, philo, "has taken a fork");
+	
+	}
+	else
+	{
+		pthread_mutex_lock(philo->r_fork);
+		display_msg(table, philo, "has taken a fork");
+		pthread_mutex_lock(philo->l_fork);
+		display_msg(table, philo, "has taken a fork");
+	
+	}
+	pthread_mutex_lock(philo->r_fork);//verrouille la fourchette dt;
 	display_msg(table, philo, "has taken a fork");
 	if (check_flag_death(table)) // Vérifie juste après la première fourchette
     {
-        pthread_mutex_unlock(&table->fork[first]);
+        pthread_mutex_unlock(philo->r_fork);
         return (0);
     }
-	pthread_mutex_lock(&table->fork[second]);
+	pthread_mutex_lock(philo->l_fork);
 	display_msg(table, philo, "has taken a fork");
 	if (check_flag_death(table)) // Vérifie juste après la première fourchette
     {
-        pthread_mutex_unlock(&table->fork[first]);
-		pthread_mutex_unlock(&table->fork[second]);
+        pthread_mutex_unlock(philo->r_fork);
+		pthread_mutex_unlock(philo->l_fork);
         return (0);
     }
 	return (2);//as pris 2 fourchettes
 }
-void release_fork(t_table *table, t_philo *philo)
+void release_fork(t_philo *philo)
 {
-	pthread_mutex_unlock(&table->fork[philo->r_fork]);//deverrouille la fourchette dt;
+	pthread_mutex_unlock(philo->r_fork);//deverrouille la fourchette dt;
 	//display_msg(table, philo, "unlock r_fork");  
-	pthread_mutex_unlock(&table->fork[philo->l_fork]);//deverrouille la fourchette gch;
+	pthread_mutex_unlock(philo->l_fork);//deverrouille la fourchette gch;
 	//display_msg(table, philo, "unlock l_fork");
 }
 //philo mange
@@ -608,16 +631,29 @@ void routine(t_table *table, t_philo *philo)
 		if (take_forks(table, philo) == 1)//si un seul philo
 		{
 			ft_usleep(table->time_to_die);
-        	pthread_mutex_unlock(&table->fork[philo->r_fork]);
+        	pthread_mutex_unlock(philo->r_fork);
         	break;
 		}
+		else if (take_forks(table, philo) == 0)//la ou les fourchette ont deja ete unlock
+			break;
+		else if (take_forks(table, philo) == 2)//a pris les deux fourchettes
+		{
+			if (check_flag_death(table) != 0)
+			{
+				release_fork(philo);
+				break;
+			}
+			eating(table, philo);
+			release_fork(philo);
+			
+		}
+		else if (take_forks(table, philo) == -1)//si erreur de mutex
+			break;
 		else if (check_flag_death(table) != 0)
 		{
-			release_fork(table, philo);
+			release_fork(philo);
         	break;
 		}
-		eating(table, philo);
-		release_fork(table, philo);
 		if (check_flag_death(table) != 0)
             break;
 		sleeping(table, philo);
