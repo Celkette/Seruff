@@ -1,0 +1,79 @@
+
+valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --suppressions=ignore.supp ./Minishell
+SUPRESSION DES STILL REACHABLE
+valgrind --leak-check=full --show-leak-kinds=definite --child-silent-after-fork=yes --trace-children=yes --suppressions=ignore.supp ./Minishell
+
+Fichier ignore.supp
+pour supprimer les leak de readline
+ne fonctionne pas pour leak de grep
+
+sans l'environnement
+    env -i ./Minishell
+    valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes --suppressions=ignore.supp env -i ./Minishell
+    APPEL de ls: /usr/bin/ls (le path etant absent, aller chercher les cmd a leur adresse)
+Doit rester comme variable d'env SHLVL / _ / PWD / OLDPWD(apres un changement de repertoire)
+Les builtin doivent marcher
+
+SHLVL = niveau d'imbrication de shell( dans Minishell, lancer bash, SHLVL +=1)
+_ = chemin du dernier programme executé ==> peut s'unset mais se recrée automatiquement
+PWD = chemin du repertoire courant
+OLDPWD = chemin du repertoire avant le dernier cd
+
+
+lORS DU TEST EXPORT
+Si pas dans ordre alphabetique, utiliser fonction dans Fonct_pour_ordre alpha_var_env.c
+
+
+La variable d’environnement _ (underscore) dans Bash contient le chemin du dernier programme exécuté. 
+                                            Elle ne doit pas pouvoir etre supprimé par unset
+
+
+QUAND val variable tab, saut de ligne ...
+FAIRE printf "|%s|\n" "$HOLA"
+
+command with an absolute path like /bin/ls or any other command with arguments
+/bin/ls -la
+/bin/ls -l /etc
+/bin/cat /etc/passwd
+/usr/bin/grep root /etc/passwd
+/bin/echo Hello World
+/usr/bin/wc -l /etc/passwd
+/bin/mkdir testdir
+/bin/rm -rf testdir
+/usr/bin/touch testfile
+/bin/date +%s
+/usr/bin/head -n 5 /etc/passwd
+
+
+-n supprime le retour a la ligne avant l'appel du promopt
+ex: prompt>echo -n hello
+    helloprompt>
+
+
+
+exit
+exit 0
+exit 1
+exit 42
+exit 255
+exit -1
+exit 123
+exit 256
+exit 999
+exit 2
+-> echo $?
+
+
+minishell0-0$ echo $?
+0
+minishell0-0$ ls
+minishell0-0$ echo $?
+0
+minishell0-0$ ls sdfgad
+ls: cannot access 'sdfgad': No such file or directory
+minishell0-0$ echo $?
+2
+
+cat /nofile        # code 1 (fichier n'existe pas)
+ls /notfound       # code 2 (dossier n'existe pas)
+$?       # code 127
