@@ -1,0 +1,78 @@
+# Fichiers de test (actuels)
+#test.sh
+#test/Minishell
+
+# Fichiers objets et compilation
+*.o
+*.a
+objs/*
+objs/
+objs
+
+#fichiers perso
+
+A_CORRIGER
+A_VOIR_AVEC_NICO.txt
+CHANGEMENT
+fonction_pour_debug.c
+main_test_final.c
+ERREUR2
+ERREUR VALGRIND
+ignore.supp
+valgrind.supp
+file
+lo.sh
+./POUR_MOI_a-garder/
+test.txt
+
+
+
+.vscode/launch.json
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+
+# Exécutables
+Minishell
+minishell
+a.out
+test_dollar
+
+# Fichiers temporaires et système
+*~
+*.swp
+*.tmp
+.DS_Store
+
+# Configuration VSCode (personnel)
+.vscode/
+.vscode/settings.json
+.vscode/c_cpp_properties.json
+.vscode/launch.json
+
+# Fichiers spécifiques projet (selon vos besoins)
+#Makefile_test
+#Makefile_simple
+#test_main
+#test_tokenize.c
+
+# Fichiers de sauvegarde
+*.bak
+*.backup
+
+# Logs et debug
+*.log
+core
+vgcore.*
+
+# Dossiers de build
+build/
+bin/
+obj/
+
+# Fichiers de debug Valgrind
+*.supp
+valgrind-out.txt
+
+# Fichiers générés automatiquement
+tags
+.tags
