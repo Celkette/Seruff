@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 10:53:05 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/21 11:54:34 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:59:38 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ static int	handle_single_redir(t_list *head, t_r_in *redir_in)
 
 t_r_in	*get_redir_in(t_list *head)
 {
-	t_r_in	*redir_in;
+	t_r_in		*redir_in;
 	t_token		*token;
 
 	if (!head)

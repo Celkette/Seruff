@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/17 13:34:20 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 11:57:59 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 14:50:27 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 // puis retourne la redir out
 t_r_out	*get_redir_out(t_list *head)
 {
-	t_r_out	*redir_out;
+	t_r_out		*redir_out;
 	t_token		*token;
 	int			i;
 
@@ -76,8 +76,8 @@ void	get_redir_in_here_doc(t_list *head, t_r_in *redir_in)
 	t_token	*token;
 
 	token = consume_token(head);
-	g_readline.hd_active = 1;
-	while (g_readline.hd_active)
+	
+	while (1)
 	{
 		s = readline("> ");
 		if (s)

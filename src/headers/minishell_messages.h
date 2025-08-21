@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 07:37:22 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/20 10:30:10 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:15:44 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # define ERROR_PIPE2 "minishell: syntax error near unexpected token `||'\n"
 # define ERROR_NEWLINE "minishell: syntax error near unexpected \
 token `newline'\n"
+# define ERROR_NEWLINE2 "minishell: syntax error near unexpected \
+token `newline'"
 # define ERROR_QUOTE "minishell: syntax error miss quote\n"
 # define ERROR_TOKEN1 "minishell: syntax error near unexpected token: `\n"
 # define ERROR_TOKEN2 "minishell: syntax error near unexpected token: `"

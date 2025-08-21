@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:05:32 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 12:01:53 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:18:50 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,8 @@ void	set_fd_in_node(t_env *minishell, t_tree *node, int last, int i);
 void	fork_part(t_env *minishell, t_tree *node, int last, int i);
 /*exec.c*/
 int		exec_one_tree(t_env *minishell, t_tree *node);
-void	exec_tree(t_env *minishell, t_tree *tree, t_tree *parent, int i, int *j);
+void	exec_tree(t_env *minishell, t_tree *tree, t_tree *parent, int i,
+			int *j);
 /*NODE*/
 /*node.c*/
 int		manage_token_redir(t_list *head, t_tree *node, t_token *token);

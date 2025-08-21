@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:11:45 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/19 11:53:38 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:37:20 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,4 +35,20 @@ void	update_env_oldpath(t_env *minishell)
 		}
 		lst = lst->next;
 	}
+}
+
+int	make_chdir(t_arg *arg, char *new_path)
+{
+	if (!new_path)
+		return (-1);
+	else if (chdir(new_path) != 0)
+	{
+		ft_putstr_fd("minishell: cd: ", 2);
+		ft_putstr_fd(arg->node->arg->data, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+		free(new_path);
+		return (-1);
+	}
+	return (0);
 }

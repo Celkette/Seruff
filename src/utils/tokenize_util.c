@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/18 16:27:08 by celine            #+#    #+#             */
-/*   Updated: 2025/08/21 11:48:34 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:59:07 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,18 +65,6 @@ t_tkty	ft_get_token_type(const char *data, int len)
 		return (TOK_REDIR_IN);
 	if (ft_strncmp(data, "|", 1) == 0)
 		return (TOK_PIPE);
-		/*
-	if (ft_strncmp(data, "||", 2) == 0)
-		return (TOK_AND);
-	if (ft_strncmp(data, "&&", 2) == 0)
-		return (TOK_OR);
-	if (ft_strncmp(data, "&", 1) == 0)
-		return (TOK_AMPERSAND);
-	if (ft_strncmp(data, "(", 1) == 0)
-		return (TOK_PARA_OPEN);
-	if (ft_strncmp(data, ")", 1) == 0)
-		return (TOK_PARA_CLOSE);
-		*/
 	return (TOK_WORD);
 }
 

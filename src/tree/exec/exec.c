@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/21 14:29:45 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/19 13:52:21 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 13:57:34 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	update_last_cmd(t_env *minishell, char *s)
 	{
 		tmp = lst->data;
 		if (tmp && *tmp->key == '_' && *(tmp->key + 1) == 0)
-			break;
+			break ;
 		lst = lst->next;
 	}
 	if (lst)
@@ -83,68 +83,3 @@ void	exec_tree(t_env *minishell, t_tree *tree, t_tree *parent, int i, int *j)
 	}
 	(*j)++;
 }
-
-
-//ESAI DE REDUCTION EXEC_TREE
-
-/*typedef struct s_exec_params
-{
-	t_tree	*parent;
-	int		i;
-	int		*j;
-}	t_exec_params;
-
-static int	handle_root_node(t_env *minishell, t_tree *tree)
-{
-    if (minishell->last_cmd)
-        free(minishell->last_cmd);
-    minishell->last_cmd = ft_strndup(tree->content, ft_strlen(tree->content));
-    exec_one_cmd(minishell, tree);
-}
-
-static int	should_skip_execution(t_tree *tree)
-{
-    if (!tree->type || tree->status || (!tree->built_in && !tree->content))
-        return (1); // Doit skipper
-    return (0);     // Ne doit pas skipper
-}
-
-static void	handle_left_pipeline(t_env *minishell, t_tree *tree, int *j)
-{
-	if (tree->left && !tree->left->type)
-	{
-		exec_pipeline(minishell, tree->left, 0, *j);
-		(*j)++;
-	}
-}
-
-static void	handle_right_pipeline(t_env *minishell, t_tree *tree, t_exec_params *params)
-{
-	if (!params->parent || !params->parent->type)
-	{
-		if (minishell->last_cmd)
-			free(minishell->last_cmd);
-		minishell->last_cmd = ft_strndup(tree->path, ft_strlen(tree->path));
-		exec_pipeline(minishell, tree->right, 1, *(params->j));
-	}
-	else
-		exec_pipeline(minishell, tree->right, 0, *(params->j));
-	(*(params->j))++;
-}
-
-void	exec_tree(t_env *minishell, t_tree *tree, t_exec_params *params)
-{
-    if (!tree)
-        return ;
-    if (tree->left)
-        exec_tree(minishell, tree->left, params);
-    if (params->i == 0 && !tree->type)
-    {
-        handle_root_node(minishell, tree);
-        return ; // Return après l'appel
-    }
-    if (should_skip_execution(tree))
-        return ; // RETURN CONSERVÉ
-    handle_left_pipeline(minishell, tree, params->j);
-    handle_right_pipeline(minishell, tree, params);
-}*/

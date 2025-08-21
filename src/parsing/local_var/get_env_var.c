@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/28 10:13:05 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/19 15:26:38 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:57:55 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,30 +150,3 @@ int	is_var_in_env(t_env *minishell, char *var_name)
 	}
 	return (0);
 }
-
-void	safe_add_env_list(t_list *lst, t_var *new_var)
-{
-	t_list	*tmp;
-	t_var	*var;
-	
-	if (!lst || !new_var)
-		return ;
-	tmp = lst;
-	while (tmp)
-	{
-		var = (t_var *)tmp->data;
-		if (ft_strncmp(var->key, new_var->key, ft_strlen(var->key)) == 0 && ft_strlen(new_var->key) == ft_strlen(var->key))
-		{
-			if (var->val)
-				free(var->val);
-			var->val = new_var->val;
-			free(new_var->key);
-			free(new_var);
-			return ;
-		}
-		tmp = tmp->next;
-	}
-	ft_lstadd_back(&lst, ft_create_node(new_var));
-}
-
-

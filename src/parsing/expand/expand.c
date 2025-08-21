@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 10:12:58 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/18 12:52:48 by celine           ###   ########.fr       */
+/*   Updated: 2025/08/21 12:56:12 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,7 @@ static void	handle_expand_list(t_env *minishell,
 	if (token->hered == 1)
 		new_data = manage_hered(current, meta);
 	else if (token->hered != 1)
-	//{
 		new_data = expand(minishell, token->data, meta);
-		/*if (!new_data)
-			new_data = strdup("minishell");*/
-	//}
 	if (ft_strncmp(token->data, new_data, ft_strlen(token->data)) != 0)
 	{
 		free(token->data);

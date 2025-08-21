@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 10:07:49 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/19 10:45:57 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 14:48:14 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,7 @@
 void	sig_ctrl_c_catcher(int n)
 {
 	(void)n;
-	if (g_readline.hd_active)
-	{
-		g_readline.hd_active_sigint = 1;
-		return ;
-	}
+	
 	write(STDOUT_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
@@ -29,15 +25,7 @@ void	sig_ctrl_c_catcher(int n)
 
 int	sigint_hook(void)
 {
-	if (g_readline.hd_active_sigint)
-	{
-		g_readline.hd_active_sigint = 0;
-		g_readline.hd_active = 0;
-		g_readline.abort_exec = 1;
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_done = 1;
-	}
+	
 	return (0);
 }
 

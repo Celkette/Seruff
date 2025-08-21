@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/29 10:27:16 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 11:20:19 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:40:28 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,9 @@ int	export_built_in(void *p)
 	char	*tmp;
 	char	*sep;
 	int		code;
+	t_list	*list_arg;
+	int		i;
+	t_var	*var;
 
 	if (!p)
 		return (-1);
@@ -28,13 +31,13 @@ int	export_built_in(void *p)
 		free(p);
 		return (-1);
 	}
-	if (!arg->minishell->env_list || !(t_list *)arg->node->arg || !((t_list *)arg->node->arg)->data)
+	if (!arg->minishell->env_list || !(t_list *)arg->node->arg
+		|| !((t_list *)arg->node->arg)->data)
 	{
 		code = export_no_arg(arg->minishell);
 		free(p);
 		return (code);
 	}
-	t_list *list_arg;
 	list_arg = (t_list *)arg->node->arg;
 	while (list_arg)
 	{
@@ -49,7 +52,7 @@ int	export_built_in(void *p)
 		else
 		{
 			sep = ft_strchr(tmp, '=');
-			int	i = 0;
+			i = 0;
 			if (!ft_isalpha(tmp[i]) && tmp[i] != '_' && code != 2)
 				code = 1;
 			if (!sep && !code && tmp[i])
@@ -89,7 +92,6 @@ int	export_built_in(void *p)
 		}
 		else
 		{
-			t_var	*var;
 			var = create_var(tmp, sep);
 			if (!var)
 			{

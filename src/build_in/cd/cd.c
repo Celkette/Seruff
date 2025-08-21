@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/10 17:06:24 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 11:19:59 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:52:52 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,6 @@ char	*manage_tilee(t_env *minishell, const char *path)
 	if (!str)
 		return (0);
 	return (str);
-}
-
-int	make_chdir(t_arg *arg, char *new_path)
-{
-	if (!new_path)
-		return (-1);
-	else if (chdir(new_path) != 0)
-	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(arg->node->arg->data, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		free(new_path);
-		return (-1);
-	}
-	return (0);
 }
 
 char	*get_old_path(t_arg *arg)
@@ -107,6 +91,48 @@ char	*get_path(t_arg *arg)
 	return (new_path);
 }
 
+static void	handle_get_new_path(t_env *minishell)
+{
+	t_var	*var;
+
+	if (minishell->act_path)
+	{
+		var = create_classic_var("PWD", minishell->act_path);
+		if (var)
+			safe_add_env_list(minishell->env_list, var);
+		var = create_classic_var("OLDPWD", minishell->last_path);
+		if (var)
+			safe_add_env_list(minishell->env_list, var);
+	}
+}
+
+void	get_new_path(t_env *minishell)
+{
+	int		size;
+
+	if (!minishell)
+		return ;
+	size = 0;
+	while (1)
+	{
+		size += 100;
+		if (size >= INT_MAX - 101)
+			return ;
+		minishell->act_path = malloc(sizeof(char) * size);
+		if (!minishell->act_path)
+			return ;
+		if (!getcwd(minishell->act_path, size - 1))
+		{
+			if (errno != ERANGE)
+				return ;
+		}
+		else
+			break ;
+	}
+	handle_get_new_path(minishell);
+}
+//Version non decoupée
+/*
 void	get_new_path(t_env *minishell)
 {
 	int		size;
@@ -141,30 +167,4 @@ void	get_new_path(t_env *minishell)
 			safe_add_env_list(minishell->env_list, var);
 	}
 }
-
-//Version avec commentaires
-/*static int	make_chdir(t_arg *arg, char *new_path)
-{
-	if (!new_path)
-		return (-1);
-	else if (chdir(new_path) != 0)
-	{
-		ft_putstr_fd("minishell: cd: ", 2);
-		ft_putstr_fd(arg->node->arg->data, 2);
-		ft_putstr_fd(": ", 2);
-		ft_putendl_fd(strerror(errno), 2);
-		free(new_path);
-		return (-1);
-	}
-	
-	//if (arg->minishell->last_path)
-	//	free(arg->minishell->last_path);
-	//arg->minishell->last_path = ft_strndup(arg->minishell->act_path, \
-	//	ft_strlen(arg->minishell->act_path));
-	//if (arg->minishell->act_path)
-	//	free(arg->minishell->act_path);
-	//arg->minishell->act_path = ft_strndup(new_path, ft_strlen(new_path));
-	//free(new_path);
-	
-	return (0);
-}*/
+*/

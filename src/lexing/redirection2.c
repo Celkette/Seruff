@@ -6,11 +6,18 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 09:37:04 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/19 15:50:24 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:51:14 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+
+int	is_an_redir(char c)
+{
+	if (c == '<' || c == '>')
+		return (1);
+	return (0);
+}
 
 static int	check_out_1_2(t_list *lst, int fd)
 {
@@ -18,7 +25,7 @@ static int	check_out_1_2(t_list *lst, int fd)
 		return (-1);
 	if (((t_token *)lst->data)->data[0] == '|')
 	{
-		ft_putstr_fd("minishell: syntax error near unexpected token `", 1);
+		ft_putstr_fd(ERROR_TOKEN2, 1);
 		ft_putstr_fd(((t_token *)lst->data)->data, 1);
 		ft_putendl_fd("'", 1);
 		return (1);
@@ -61,11 +68,10 @@ int	check_out_1(t_list *lst)
 	}
 	else
 	{
-		ft_putendl_fd("minishell: syntax error near unexpected token `newline'", \
-		1);
+		ft_putendl_fd(ERROR_NEWLINE2, 1);
 		return (-1);
 	}
-	ft_putstr_fd("minishel: syntax error near unexpected token `", 1);
+	ft_putstr_fd(ERROR_TOKEN2, 1);
 	ft_putstr_fd(((t_token *)lst->data)->data, 2);
 	ft_putendl_fd("'", 1);
 	return (1);

@@ -6,45 +6,11 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 23:54:11 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/19 15:50:30 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 14:49:45 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
-
-/*is_an_redir(char c)
-Vérifie si le caractère passé est une redirection (< ou >). 
-//Retourne 1 si oui, sinon 0.
-
-*check_in_1(t_list lst)
-Vérifie la validité d’une redirection d’entrée (<).
-
-Gère les erreurs de syntaxe (ex : < suivi de > ou double <).
-Ouvre le fichier en lecture si la syntaxe est correcte.
-Affiche des messages d’erreur en cas de problème (fichier inexistant, 
-//mauvais token, etc.).
-*check_out_1(t_list lst)
-Vérifie la validité d’une redirection de sortie (>).
-
-Gère les erreurs de syntaxe (ex : > suivi de |).
-Ouvre/crée le fichier en écriture si la syntaxe est correcte.
-Affiche des messages d’erreur en cas de problème.
-*check_redir_case(t_list lst)
-Parcourt la liste de tokens et appelle check_in_1 ou check_out_1 selon 
-//le type de redirection rencontré.
-
-Retourne une erreur si une redirection est mal formée.
-*check_redir(t_list lst)
-Fonction principale qui lance la vérification des redirections sur la 
-//liste de tokens en appelant check_redir_case.
-  */
-// Verifie si le "token" est une redirection
-int	is_an_redir(char c)
-{
-	if (c == '<' || c == '>')
-		return (1);
-	return (0);
-}
 
 static int	check_in_1_next(t_list *lst, int fd)
 {
@@ -70,11 +36,25 @@ static int	check_in_1_next(t_list *lst, int fd)
 	return (0);
 }
 
-static void	print_check_in_1(t_list *lst)
+static void	print1_check_in_1(t_list *lst)
 {
 	ft_putstr_fd(ERROR_TOKEN2, 1);
 	ft_putstr_fd(((t_token *)lst->data)->data, 1);
 	ft_putstr_fd("'\n", 1);
+}
+
+static void	print2_check_in_1(t_list *lst)
+{
+	ft_putstr_fd(ERROR_TOKEN2, 2);
+	ft_putstr_fd(((t_token *)lst->next->data)->data, 2);
+	ft_putstr_fd("'\n", 2);
+}
+
+static void	print3_check_in_1(t_list *lst)
+{
+	ft_putstr_fd(ERROR_TOKEN2, 2);
+	ft_putstr_fd(((t_token *)lst->data)->data, 2);
+	ft_putstr_fd("'\n", 2);
 }
 
 int	check_in_1(t_list *lst)
@@ -88,8 +68,39 @@ int	check_in_1(t_list *lst)
 		((t_token *)lst->data)->data[0] == '<' && lst->next && \
 		((t_token *)lst->next->data)->data[0] == '>')
 	{
+		print2_check_in_1(lst);
+		return (-1);
+	}
+	if (ft_strlen(((t_token *)lst->data)->data) == 2 && \
+		((t_token *)lst->data)->data[0] == '<' && lst->next && \
+		((t_token *)lst->data)->data[1] == '<')
+		return (0);
+	if (lst->next && !is_an_redir(((t_token *)lst->next->data)->data[0]))
+		return (check_in_1_next(lst->next, fd));
+	else
+	{
+		print3_check_in_1(lst);
+		return (-1);
+	}
+	print1_check_in_1(lst);
+	return (1);
+}
+
+//Version non decoupée
+/*
+int	check_in_1(t_list *lst)
+{
+	int	fd;
+
+	if (!lst)
+		return (-1);
+	fd = -1;
+	if (ft_strlen(((t_token *)lst->data)->data) == 1 && \
+		((t_token *)lst->data)->data[0] == '<' && lst->next && \
+		((t_token *)lst->next->data)->data[0] == '>')
+	{
 		ft_putstr_fd(ERROR_TOKEN2, 2);
-		ft_putstr_fd(((t_token * )lst->next->data)->data, 2);
+		ft_putstr_fd(((t_token *)lst->next->data)->data, 2);
 		ft_putstr_fd("'\n", 2);
 		return (-1);
 	}
@@ -104,12 +115,11 @@ int	check_in_1(t_list *lst)
 	else
 	{
 		ft_putstr_fd(ERROR_TOKEN2, 2);
-		ft_putstr_fd(((t_token * )lst->data)->data, 2);
+		ft_putstr_fd(((t_token *)lst->data)->data, 2);
 		ft_putstr_fd("'\n", 2);
 		return (-1);
 	}
-	print_check_in_1(lst);
+	print1_check_in_1(lst);
 	return (1);
 }
-
-
+*/

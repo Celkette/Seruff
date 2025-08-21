@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:07:59 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 11:24:29 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 14:47:39 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,9 @@
 # include <sys/wait.h>
 # include <dirent.h> // Pour le type DIR
 
-#endif // MINISHELL_H
 
-#ifndef COMMON_H
-# define COMMON_H
 
-extern t_manage_readline	g_readline;
 #endif
+
+//#ifndef COMMON_H
+//# define COMMON_H
