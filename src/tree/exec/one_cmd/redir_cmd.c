@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 02:57:22 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 13:47:50 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 11:57:12 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ static int	get_redir_fd_out(t_r_out *redir_out)
 // Fere le redirection out
 int	use_redir_out(t_tree *node)
 {
-	t_r_out		*redir_out;
+	t_r_out	*redir_out;
 	t_list		*redir_list;
 	int			fd;
 

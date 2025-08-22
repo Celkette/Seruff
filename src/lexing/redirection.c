@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 23:54:11 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 14:49:45 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:51:57 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ static void	print2_check_in_1(t_list *lst)
 	ft_putstr_fd(ERROR_TOKEN2, 2);
 	ft_putstr_fd(((t_token *)lst->next->data)->data, 2);
 	ft_putstr_fd("'\n", 2);
+	return (-1);
 }
 
 static void	print3_check_in_1(t_list *lst)
@@ -55,6 +56,7 @@ static void	print3_check_in_1(t_list *lst)
 	ft_putstr_fd(ERROR_TOKEN2, 2);
 	ft_putstr_fd(((t_token *)lst->data)->data, 2);
 	ft_putstr_fd("'\n", 2);
+	return (-1);
 }
 
 int	check_in_1(t_list *lst)
@@ -69,18 +71,18 @@ int	check_in_1(t_list *lst)
 		((t_token *)lst->next->data)->data[0] == '>')
 	{
 		print2_check_in_1(lst);
-		return (-1);
 	}
 	if (ft_strlen(((t_token *)lst->data)->data) == 2 && \
 		((t_token *)lst->data)->data[0] == '<' && lst->next && \
 		((t_token *)lst->data)->data[1] == '<')
-		return (0);
+	{
+		return (-1);
+	}
 	if (lst->next && !is_an_redir(((t_token *)lst->next->data)->data[0]))
 		return (check_in_1_next(lst->next, fd));
 	else
 	{
 		print3_check_in_1(lst);
-		return (-1);
 	}
 	print1_check_in_1(lst);
 	return (1);

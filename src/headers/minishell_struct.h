@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 10:11:07 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 12:01:08 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/22 16:07:36 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ typedef struct s_meta
 	int		single_quote;
 	int		double_quote;
 	int		quote_open;
+	int		is_quote;
 	int		pipe;
 	int		redir_in;
 	int		redir_out;

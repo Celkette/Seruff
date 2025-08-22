@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/19 11:32:50 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/21 14:51:25 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 11:11:10 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	read_stdin(t_env *minishell, t_meta *meta)
 	str = NULL;
 	while (1)
 	{
-		
+		g_readline.in_exec = 0;
 		if (isatty(STDIN_FILENO))
 			str = readline("minishell0-0$ ");
 		else

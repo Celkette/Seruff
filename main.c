@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 08:28:40 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 11:07:01 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/15 15:29:39 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,10 @@ t_manage_readline	g_readline;
 
 int	main(int ac, char **av, char **env)
 {
-	t_env			minishell;
-	t_meta			meta;
+	t_env	minishell;
+	t_meta	meta;
 	struct termios	test;
-	t_list			*varlist;
+	t_list	*varlist;
 
 	(void)ac;
 	(void)av;

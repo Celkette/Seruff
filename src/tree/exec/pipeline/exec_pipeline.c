@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/23 19:09:06 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 13:55:25 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 13:11:22 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,10 @@ int	exec_pipeline(t_env *minishell, t_tree *node, int last, int i)
 		return (-1);
 	}
 	node->status = 1;
-	if (i == 0)
+	if (node->built_in && i == 0)
+		update_last_cmd(minishell, ft_strndup(node->content,
+				ft_strlen(node->content)));
+	else if (i == 0)
 		update_last_cmd(minishell, ft_strndup(node->content,
 				ft_strlen(node->content)));
 	pid = fork();

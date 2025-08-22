@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 08:50:42 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 14:51:04 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 11:47:34 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ void	try_tokenize_hell2(t_env *minishell, int valid)
 	if (minishell && minishell->tree)
 	{
 		j = 0;
-		if (valid)
+		if (valid && !g_readline.abort_exec)
 		{
 			exec_tree(minishell, minishell->tree, NULL, 0, &j);
 			minishell->exec.exit_code = wait_exec(minishell);
@@ -86,7 +86,9 @@ void	try_tokenize_hell(t_env *minishell, char *s, t_meta *meta)
 	if (check_redir(minishell->token_list) != 0)
 		return ;
 	valid = 1;
+	g_readline.abort_exec = 0;
 	minishell->tree = prepare(minishell, minishell->token_list, 0, &valid);
+	g_readline.in_exec = 1;
 	try_tokenize_hell2(minishell, valid);
 }
 

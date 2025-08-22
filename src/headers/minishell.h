@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:07:59 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 14:47:39 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 12:41:24 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@
 # include <sys/wait.h>
 # include <dirent.h> // Pour le type DIR
 
-
+extern int	g_readline;
 
 #endif
 
