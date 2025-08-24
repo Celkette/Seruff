@@ -41,7 +41,7 @@ static int	handle_single_redir(t_list *head, t_r_in *redir_in)
 	return (0);
 }
 
-t_r_in	*get_redir_in(t_list *head)
+t_r_in	*get_redir_in(t_env *minishell, t_list *head)
 {
 	t_r_in		*redir_in;
 	t_token		*token;
@@ -61,6 +61,6 @@ t_r_in	*get_redir_in(t_list *head)
 		}
 	}
 	else
-		get_redir_in_here_doc(head, redir_in);
+		get_redir_in_here_doc(minishell, head, redir_in);
 	return (redir_in);
 }

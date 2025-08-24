@@ -119,11 +119,13 @@ arg_tree.nud->type == TOK_REDIR_IN || arg_tree.nud->type == TOK_WORD || \
 	prepare_tree_while(minishell, lst, &arg_tree, valid);
 	return (arg_tree.nud_t);
 }
+
 /*
 void print_tree(t_tree *tree, int level, char r)
 {
 	int	i;
 	
+	(void)r;
 	i = 0;
 	if (!tree)
 		return;

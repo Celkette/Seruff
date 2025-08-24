@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_util.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
+/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 10:37:04 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/18 11:50:53 by celine           ###   ########.fr       */
+/*   Updated: 2025/08/22 09:26:47 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	is_expand_ok(char *str, t_meta *meta, int i)
 			return (1);
 		if (str[i + 1] == ' ' || str[i + 1] == '\t')
 			return (1);
-		if ((str[i + 1] == '\"' || str[i + 1] == '\'') && meta->quote_open == 0)
+		if ((str[i + 1] == '\'' || str[i + 1] == '\"') && meta->quote_open == 0)
 			return (2);
 		if ((str[i + 1] == '\"' || str[i + 1] == '\'') && meta->quote_open == 1)
 			return (1);
@@ -85,7 +85,14 @@ char	*special_case(const char *name, t_env *minishell)
 	else if (*name == '0')
 		return (ft_strndup("minishell", 9));
 	else if (*name == '?')
+	{
+		if (exit_code == 130)
+		{
+			exit_code = 0;
+			minishell->exec.exit_code = 130;
+		}
 		return (ft_itoa(minishell->exec.exit_code));
+	}
 	return (NULL);
 }
 
@@ -129,7 +136,7 @@ t_list	*remove_empty_tokens(t_list *list)
 		next = current->next;
 		token = (t_token *)current->data;
 		if (token->data[0] == '\0' && token->quote_type == 0)
-				list = ft_delete_remove_token(current);
+			list = ft_delete_remove_token(current);
 		current = next;
 	}
 	list = head_of_list(list);

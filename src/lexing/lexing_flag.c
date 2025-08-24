@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexing_flag.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/20 09:39:48 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/17 07:54:02 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/23 11:21:06 by celine           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ int	flag_quote(char c, t_meta *meta)
 			meta->last_quote_is = 0;
 		}
 		if (c == '\'' && meta->double_quote == 0)
-				meta->single_quote = !meta->single_quote;
+			meta->single_quote = !meta->single_quote;
 		else if (c == '\"' && meta->single_quote == 0)
-				meta->double_quote = !meta->double_quote;
+			meta->double_quote = !meta->double_quote;
 		if (meta->single_quote != 0)
 			return (1);
 		if (meta->double_quote != 0)

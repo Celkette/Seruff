@@ -19,12 +19,12 @@ static int	validate_cd_args(void *p, t_arg **arg)
 {
 	*arg = NULL;
 	if (!p)
-		return (-1);
+		return (1);
 	*arg = (t_arg *)p;
 	if (!(*arg)->minishell || !(*arg)->node)
 	{
 		free(p);
-		return (-1);
+		return (1);
 	}
 	return (0);
 }
@@ -33,9 +33,9 @@ static int	handle_cd_path(t_arg *arg, char **new_path)
 {
 	*new_path = get_path(arg);
 	if (!(*new_path))
-		return (-1);
+		return (1);
 	if (make_chdir(arg, *new_path) != 0)
-		return (-1);
+		return (1);
 	return (0);
 }
 
@@ -46,41 +46,42 @@ static int	update_last_path(t_arg *arg)
 	arg->minishell->last_path = ft_strndup(arg->minishell->act_path,
 			ft_strlen(arg->minishell->act_path));
 	if (!arg->minishell->last_path)
-		return (-1);
+		return (1);
 	return (0);
 }
 
-static void	finalize_cd(t_arg *arg)
+static int	finalize_cd(t_arg *arg)
 {
 	if (arg->minishell->act_path)
 		free(arg->minishell->act_path);
-	get_new_path(arg->minishell);
+	if (!get_new_path(arg->minishell))
+		return (1);
 	update_env_oldpath(arg->minishell);
+	return (0);
 }
 
 int	cd(void *p)
 {
 	t_arg	*arg;
+	int		code;
 	char	*new_path;
 
 	arg = NULL;
+	code = 0;
 	new_path = NULL;
 	if (validate_cd_args(p, &arg) != 0)
-		return (-1);
+		code = 1;
 	if (handle_cd_path(arg, &new_path) != 0)
-	{
-		free(p);
-		return (-1);
-	}
+		code = 1;
 	if (update_last_path(arg) != 0)
-	{
+		code = 1;
+	if (finalize_cd(arg))
+		code = 1;
+	if (p)
 		free(p);
-		return (-1);
-	}
-	finalize_cd(arg);
-	free(p);
-	free(new_path);
-	return (0);
+	if (new_path)
+		free(new_path);
+	return (code);
 }
 
 //Version sans decoupage

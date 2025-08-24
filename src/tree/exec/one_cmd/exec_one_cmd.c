@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
+#include <stdio.h>
 
 // creer un tableau de str depuis une liste
 static char	**get_split_from_list(t_list *lst)
@@ -46,19 +47,20 @@ void	exec_cmd(t_env *minishell, t_tree *node, int code)
 	void	*arg;
 
 	if (!minishell || !node || (!node->path && !node->built_in))
-		return ;
+		exit (126);
+	signal(SIGQUIT, SIG_DFL);
 	if (!node->built_in)
-		ft_lstadd_front(&node->arg, ft_create_node(node->content));
-	tmp_arg = get_split_from_list(node->arg);
+		(ft_lstadd_front(&node->arg, ft_create_node(node->content)), \
+		tmp_arg = get_split_from_list(node->arg));
+	if (node->redir_out)
+		if (use_redir_out(node) != 0)
+			exit(1);
 	if (node->redir_in)
 		use_redir_in(node);
-	if (node->redir_out)
-		use_redir_out(node);
 	if (node->built_in)
 	{
 		arg = get_arg_built_in(minishell, node);
-		if (arg)
-			code = (*node->built_in)(arg);
+		code = (*node->built_in)(arg);
 		exit(code);
 	}
 	if (minishell->env)
@@ -68,30 +70,39 @@ void	exec_cmd(t_env *minishell, t_tree *node, int code)
 	exit(0);
 }
 
+static int	manage_fork(t_env *minishell, t_tree *node)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid < 0)
+		return (-2);
+	if (pid == 0)
+		exec_cmd(minishell, node, 0);
+	if (node->redir_in && node->redir_in->fd > 0)
+		close(node->redir_in->fd);
+	node->pid = pid;
+	return (0);
+}
+
 // Execute une commande simple
 int	exec_one_cmd(t_env *minishell, t_tree *node)
 {
-	pid_t	pid;
 	t_arg	*arg;
 
 	if (!node || !node->content)
-		return (-1);
+	{
+		if (node->redir_in && node->redir_in->fd > 0)
+			close(node->redir_in->fd);
+		return (126);
+	}
 	if (node->need_parent)
 	{
 		arg = get_arg_built_in(minishell, node);
 		if (arg)
-			(*node->built_in)(arg);
+			return ((*node->built_in)(arg));
 		else
-			(*node->built_in)(NULL);
-		return (0);
+			return ((*node->built_in)(NULL));
 	}
-	else
-	{
-		pid = fork();
-		if (pid < 0)
-			return (-2);
-		if (pid == 0)
-			exec_cmd(minishell, node, 0);
-	}
-	return (0);
+	return (manage_fork(minishell, node));
 }

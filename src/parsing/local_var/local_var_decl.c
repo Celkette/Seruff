@@ -81,7 +81,7 @@ int	check_if_var_decl(char *str)
 		return (0);
 	}
 	while (str[i] && (str[i] == '_' || ft_isalnum(str[i])))
-	{	
+	{
 		i++;
 	}
 	if (i == 0 || str[i] != '=')

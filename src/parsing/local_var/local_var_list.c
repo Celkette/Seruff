@@ -52,7 +52,7 @@ t_list	*is_var_in_local(t_env *minishell, char *var_name)
 			&& ft_strncmp(var_name, var_str->key, ft_strlen(var_name)) == 0)
 			return (current);
 		current = current->next;
-	}	
+	}
 	return (NULL);
 }
 

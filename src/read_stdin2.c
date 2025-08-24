@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "headers/minishell.h"
+#include <readline/readline.h>
 
 //@ Boucle principale du shell
 //@lit l’entrée utilisateur, traite les commandes 
@@ -24,6 +25,7 @@ static int	read_stdin2(t_env *minishell, char *str, t_meta *meta)
 		rl_clear_history();
 		if (isatty(STDIN_FILENO))
 			write(STDOUT_FILENO, "exit\n", 5);
+		exit_minishell(minishell);
 		return (-1);
 	}
 	else
@@ -44,17 +46,34 @@ static void	read_stdin3(char *str)
 		free(str);
 }
 
-void	read_stdin(t_env *minishell, t_meta *meta)
+void	clear_pid_list(t_env *minishell)
 {
-	char	*str;
-	char	*tmp;
+	t_list	*lst;
+	t_list	*tmp;
 
+	if (!minishell)
+		return ;
+	lst = minishell->pid_list;
+	while (lst)
+	{
+		tmp = lst;
+		lst = lst->next;
+		free(tmp->data);
+		free(tmp);
+	}
+}
+
+void	read_stdin(t_env *minishell, t_meta *meta, char *str, char *tmp)
+{
 	str = NULL;
 	while (1)
 	{
-		g_readline.in_exec = 0;
+		exit_code = -1;
 		if (isatty(STDIN_FILENO))
+		{
 			str = readline("minishell0-0$ ");
+			exit_code = 0;
+		}
 		else
 		{
 			str = get_next_line(STDIN_FILENO);
@@ -63,42 +82,12 @@ void	read_stdin(t_env *minishell, t_meta *meta)
 			tmp = ft_strndup(str, ft_strlen(str) - 1);
 			if (!tmp)
 				break ;
-			free(str);
-			str = tmp;
+			(free(str), str = tmp);
 		}
 		if (read_stdin2(minishell, str, meta) == -1)
 			break ;
 	}
 	read_stdin3(str);
-	exit_minishell(minishell);
+	if (!isatty(STDIN_FILENO))
+		exit_minishell(minishell);
 }
-//Version non decoupée
-/*void	read_stdin(t_env *minishell, t_meta *meta)
-{
-	char	*str;
-	char	*tmp;
-
-	str = NULL;
-	while (1)
-	{
-		g_readline.in_exec = 0;
-		if (isatty(STDIN_FILENO))
-			str = readline("minishell0-0$ ");
-		else
-		{
-			str = get_next_line(STDIN_FILENO);
-			if (!str)
-				break ;
-			tmp = ft_strndup(str, ft_strlen(str) - 1);
-			if (!tmp)
-				break ;
-			free(str);
-			str = tmp;
-		}
-		if (read_stdin2(minishell, str, meta) == -1)
-			break ;
-	}
-	if (str)
-		free(str);
-	exit_minishell(minishell);
-}*/

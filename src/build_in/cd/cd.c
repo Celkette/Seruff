@@ -80,7 +80,7 @@ char	*get_path(t_arg *arg)
 			new_path = ft_strndup(var_env_value(arg->minishell, "HOME"), \
 			ft_strlen(var_env_value(arg->minishell, "HOME")));
 	}
-	else if ((((char *)arg->node->arg->data)[0] == '~'))
+	else if (((char *)arg->node->arg->data)[0] == '~')
 		new_path = manage_tilee(arg->minishell, arg->node->arg->data);
 	else if ((((char *)arg->node->arg->data)[0] == '-' && \
 			((char *)arg->node->arg->data)[1] == 0))
@@ -106,30 +106,31 @@ static void	handle_get_new_path(t_env *minishell)
 	}
 }
 
-void	get_new_path(t_env *minishell)
+int	get_new_path(t_env *minishell)
 {
 	int		size;
 
 	if (!minishell)
-		return ;
+		return (1);
 	size = 0;
 	while (1)
 	{
 		size += 100;
 		if (size >= INT_MAX - 101)
-			return ;
+			return (1);
 		minishell->act_path = malloc(sizeof(char) * size);
 		if (!minishell->act_path)
-			return ;
+			return (1);
 		if (!getcwd(minishell->act_path, size - 1))
 		{
 			if (errno != ERANGE)
-				return ;
+				return (1);
 		}
 		else
 			break ;
 	}
 	handle_get_new_path(minishell);
+	return (100);
 }
 //Version non decoupée
 /*

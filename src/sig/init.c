@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+#include <signal.h>
 
 /*
 	* init_sig permet dintialisier linterception des signaux
@@ -28,17 +29,19 @@
 	* sigaction http://manpagesfr.free.fr/man/man2/sigaction.2.html
 */
 
+void	sig_kill_catcher(int n);
+
 int	init_sig(t_sig_manage *sig_manage)
 {
 	if (!sig_manage)
 		return (-1);
 	ft_memset(sig_manage, 0, sizeof(t_sig_manage));
 	sig_manage->s_sig_ctrl_c.sa_handler = (void *)sig_ctrl_c_catcher;
-	rl_event_hook = sigint_hook;
 	sigaction(SIGINT, &sig_manage->s_sig_ctrl_c, NULL);
 	signal(SIGQUIT, SIG_IGN);
 	return (0);
 }
+
 //AVEC COMMENTAIRE
 /*int	init_sig(t_sig_manage *sig_manage)
 {

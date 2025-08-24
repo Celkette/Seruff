@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_struct.h                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 10:11:07 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/22 16:07:36 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/23 09:17:35 by celine           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ typedef struct s_meta
 	int		single_quote;
 	int		double_quote;
 	int		quote_open;
-	int		is_quote;
+	//int		is_quote;
 	int		pipe;
 	int		redir_in;
 	int		redir_out;
@@ -69,11 +69,11 @@ typedef struct s_meta
 	int		space;
 	int		only_space;
 	int		last_char_pipe;
-	int		ampersand;
-	int		last_ampersand;
-	int		parenthesis_in;
-	int		parenthesis_out;
-	int		found_cmd;
+	//int		ampersand;
+	//int		last_ampersand;
+	//int		parenthesis_in;
+	//int		parenthesis_out;
+	//int		found_cmd;
 }	t_meta;
 
 /*************************
@@ -126,6 +126,7 @@ typedef struct s_r_out
 typedef struct s_r_in
 {
 	int		type;
+	int		fd;
 	char	*path;
 }				t_r_in;
 
@@ -144,6 +145,7 @@ typedef struct s_tree
 	int				pipefd_out;
 	int				(*built_in)(void *);
 	int				need_parent;
+	pid_t			pid;
 	t_list			*arg;
 	t_r_in			*redir_in;
 	t_list			*redir_out;
@@ -162,6 +164,7 @@ typedef struct s_exec
 	int	fd[2];
 	int	fd2[2];
 	int	exit_code;
+	int	exit_code__print;
 }				t_exec;
 
 typedef struct s_arg_tree
@@ -195,8 +198,10 @@ typedef struct s_env
 	struct s_list		*var;
 	struct s_list		*env_list;
 	struct s_list		*token_list;
+	struct s_list		*pid_list;
 	struct s_exec		exec;
 	struct s_tree		*tree;
+	struct s_meta		*meta;
 	struct termios		*term_cpy;
 	char				**env;
 	char				**path_fun_split;

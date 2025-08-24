@@ -1,5 +1,0 @@
-
-[94mexport HOLA=bonjour
-export HOLA=' hola et $HOLA'
-echo $HOLA[0m[65`DIFF[76`MEM_LEAK[89`FDS_LEAK
-[91m[66`KO[0m

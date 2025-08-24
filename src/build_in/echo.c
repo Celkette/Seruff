@@ -52,17 +52,13 @@ int	echoo(void *p)
 
 	new_line = 1;
 	if (!p)
-	{
-		ft_putstr_fd("\n", 1);
 		return (0);
-	}
 	arg = (t_arg *)p;
 	if (arg->node && arg->node->arg)
 		arg_echo(arg->node->arg, &new_line);
 	if (new_line)
 		ft_putstr_fd("\n", 1);
-	if (arg->node->top)
-		exit(0);
+	exit_minishell(arg->minishell);
 	if (p)
 		free(p);
 	return (0);

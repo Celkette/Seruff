@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_util2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/30 13:57:40 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/17 10:09:10 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/23 15:15:26 by celine           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ static void	set_token_flags(t_token *token, t_token *next_token)
 	int	i;
 
 	i = 0;
+	if (!token || !next_token)
+		return ;
 	if (ft_strncmp(token->data, "<<", 2) == 0)
+	{
 		next_token->hered = 1;
+		need_expand_heredoc(next_token);
+	}
 	else if (ft_strncmp(token->data, "<", 1) == 0)
 		next_token->redir = 1;
 	else if (ft_strncmp(token->data, ">", 1) == 0)
@@ -78,4 +83,20 @@ char	*manage_hered(t_list *current, t_meta *meta)
 			return (new_data);
 	}
 	return (new_data);
+}
+
+void	need_expand_heredoc(t_token *token)
+{
+	int	i;
+
+	i = 0;
+	while (token->data[i] != '\0')
+	{
+		if (token->data[i] == '\'' || token->data[i] == '\"')
+		{
+			token->is_quote = 1;
+			break ;
+		}
+		i++;
+	}
 }

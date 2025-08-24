@@ -40,15 +40,14 @@ void	update_env_oldpath(t_env *minishell)
 int	make_chdir(t_arg *arg, char *new_path)
 {
 	if (!new_path)
-		return (-1);
+		return (1);
 	else if (chdir(new_path) != 0)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		ft_putstr_fd(arg->node->arg->data, 2);
 		ft_putstr_fd(": ", 2);
 		ft_putendl_fd(strerror(errno), 2);
-		free(new_path);
-		return (-1);
+		return (1);
 	}
 	return (0);
 }

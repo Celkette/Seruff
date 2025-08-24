@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell_fun.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 09:05:32 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 12:18:50 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/23 15:16:20 by celine           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
   BUILD_IN
 *************/
 //cd/cd.c
-void	get_new_path(t_env *minishell);
+int	get_new_path(t_env *minishell);
 char	*manage_tilee(t_env *minishell, const char *path);
 char	*get_old_path(t_arg *arg);
 char	*get_path(t_arg *arg);
@@ -94,6 +94,7 @@ t_list	*remove_empty_tokens(t_list *list);
 /*expand_util2.c */
 void	update_token_struct(t_list *list);
 char	*manage_hered(t_list *current, t_meta *meta);
+void	need_expand_heredoc(t_token *token);
 /*expand.c*/
 char	*expand(t_env *minishell, char *str, t_meta *meta);
 char	*check_which_expand(t_env *minishell, char *str, t_meta *meta, int *i);
@@ -143,7 +144,7 @@ char	*remove_str_quotes(char *str);
 int		init_sig(t_sig_manage *sig_manage);
 /*signals.c*/
 void	sig_ctrl_c_catcher(int n);
-int		sigint_hook(void);
+void	sigin_handler_heredoc(int n);
 /************
   	TREE
 *************/
@@ -151,6 +152,8 @@ int		sigint_hook(void);
 /*exec_one_cmd.c*/
 void	exec_cmd(t_env *minishell, t_tree *node, int code);
 int		exec_one_cmd(t_env *minishell, t_tree *node);
+void	push_pid_in_lst(t_env *minishell, pid_t pid);
+void	clear_pid_list(t_env *minishell);
 /*redir_cmd.c */
 int		use_redir_in_here_doc(t_tree *node);
 int		use_redir_in(t_tree *node);
@@ -167,11 +170,10 @@ void	set_fd_in_node(t_env *minishell, t_tree *node, int last, int i);
 void	fork_part(t_env *minishell, t_tree *node, int last, int i);
 /*exec.c*/
 int		exec_one_tree(t_env *minishell, t_tree *node);
-void	exec_tree(t_env *minishell, t_tree *tree, t_tree *parent, int i,
-			int *j);
+int		exec_tree(t_env *minishell, t_tree *tree, t_tree *parent, int *j);
 /*NODE*/
 /*node.c*/
-int		manage_token_redir(t_list *head, t_tree *node, t_token *token);
+int		manage_token_redir(t_env *minishell, t_list *head, t_tree *node, t_token *token);
 t_tree	*create_word_node_tree(t_env *minishell, t_list *head, int *valid);
 /*utils.c*/
 char	*cmd_is_in_path(t_env *minishell, char *cmd);
@@ -192,9 +194,9 @@ int		get_fd_redir_out(t_token *token);
 void	check_token(t_token *token, t_r_out *redir_out, int *i);
 /*redir.c*/
 t_r_out	*get_redir_out(t_list *head);
-void	get_redir_in_here_doc(t_list *head, t_r_in *redir_in);
+void	get_redir_in_here_doc(t_env *minishell, t_list *head, t_r_in *redir_in);
 /*redir2.c*/
-t_r_in	*get_redir_in(t_list *head);
+t_r_in	*get_redir_in(t_env *minishell, t_list *head);
 /*FREE.c*/
 void	free_tree(t_tree *tree);
 /*UTILS*/
@@ -266,6 +268,6 @@ int		wait_exec(t_env *minishell);
 void	try_tokenize_hell2(t_env *minishell, int valid);
 void	try_tokenize_hell(t_env *minishell, char *s, t_meta *meta);
 /*read_stdin2.c */
-void	read_stdin(t_env *minishell, t_meta *meta);
+void	read_stdin(t_env *minishell, t_meta *meta, char *str, char *tmp);
 
 #endif

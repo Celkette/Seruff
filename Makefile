@@ -83,8 +83,8 @@ SOURCES		= main.c \
 			  src/read_stdin2.c \
 
 OBJECTS     = ${SOURCES:.c=.o}
-NAME        = Minishell
-CC          = gcc
+NAME        = minishell
+CC          = clang
 FLAGS       = -Wall -Werror -Wextra -g
 CFLAG		= -lreadline -lcurses
 #-lreadline = lie la bibliothèque readline

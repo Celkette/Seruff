@@ -11,34 +11,36 @@
 /* ************************************************************************** */
 
 #include "../headers/minishell.h"
+#include <readline/readline.h>
 
 void	sig_ctrl_c_catcher(int n)
 {
 	(void)n;
-	if (g_readline.hd_active)
-	{
-		g_readline.hd_active_sigint = 1;
-		return ;
-	}
 	write(STDOUT_FILENO, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
-	rl_done = 1;
+	if (exit_code == -1)
+	{
+		rl_replace_line("", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else
+	{
+		rl_on_new_line();
+		rl_replace_line("", 1);
+	}
 	return ;
 }
 
-int	sigint_hook(void)
+void	sigin_handler_heredoc(int n)
 {
-	if (g_readline.hd_active_sigint)
-	{
-		g_readline.hd_active_sigint = 0;
-		g_readline.hd_active = 0;
-		g_readline.abort_exec = 1;
-		rl_replace_line("", 0);
-		rl_on_new_line();
-		rl_done = 1;
-	}
-	return (0);
+	(void)n;
+	rl_replace_line("", 1);
+	exit(130);
+}
+
+void	sig_kill_catcher(int n)
+{
+	(void)n;
 }
 
 //AVEC COMMENTAIRE

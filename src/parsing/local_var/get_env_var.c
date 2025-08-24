@@ -129,12 +129,10 @@ void	copy_env_var(t_env *minishell)
 // @return 1 si la variable existe, 0 sinon
 int	is_var_in_env(t_env *minishell, char *var_name)
 {
-	int		i;
 	t_list	*lst;
 	t_var	*var;
 	int		len;
 
-	i = 0;
 	len = ft_strlen(var_name);
 	if (!minishell || !minishell->env_list || !var_name)
 		return (0);
@@ -145,7 +143,6 @@ int	is_var_in_env(t_env *minishell, char *var_name)
 		if (ft_strncmp(var->key, var_name, len) == 0
 			&& ft_strlen(var->key) == len)
 			return (1);
-		i++;
 		lst = lst->next;
 	}
 	return (0);

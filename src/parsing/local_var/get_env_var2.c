@@ -18,12 +18,10 @@
 // @return La valeur de la variable d'environnement si trouvée, NULL sinon
 t_var	*get_env_var(t_env *minishell, char *var_name)
 {
-	int		i;
 	t_list	*lst;
 	t_var	*var;
 	size_t	len;
 
-	i = 0;
 	len = ft_strlen(var_name);
 	if (!minishell || !minishell->env_list || !var_name)
 		return (0);
@@ -34,7 +32,6 @@ t_var	*get_env_var(t_env *minishell, char *var_name)
 		if (ft_strncmp(var->key, var_name, len) == 0
 			&& ft_strlen(var->key) == ft_strlen(var_name))
 			return (var);
-		i++;
 		lst = lst->next;
 	}
 	return (NULL);
@@ -42,12 +39,10 @@ t_var	*get_env_var(t_env *minishell, char *var_name)
 
 char	*var_env_value(t_env *minishell, char *var_name)
 {
-	int		i;
 	t_list	*lst;
 	t_var	*var;
 	size_t	len;
 
-	i = 0;
 	len = ft_strlen(var_name);
 	if (!minishell || !minishell->env_list || !var_name)
 		return (0);
@@ -58,7 +53,6 @@ char	*var_env_value(t_env *minishell, char *var_name)
 		if (ft_strncmp(var->key, var_name, len) == 0
 			&& ft_strlen(var->key) == ft_strlen(var_name))
 			return (var->val);
-		i++;
 		lst = lst->next;
 	}
 	return (NULL);

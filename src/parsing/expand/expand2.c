@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
+/*   By: celine <celine@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/08/17 10:45:38 by cle-rouz          #+#    #+#             */
-/*   Updated: 2025/08/20 10:23:51 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/23 14:57:18 by celine           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ t_list	*replace_expand(t_list *list, t_list *expand_list, t_list *cur_list)
 		if (cur_list == list)
 			return (result);
 		return (list);
-	}	
+	}
 	if (!result)
 	{
 		list = expand_list;
@@ -86,3 +86,33 @@ t_list	*replace_expand(t_list *list, t_list *expand_list, t_list *cur_list)
 	}
 	return (list);
 }
+
+//Token du TOK_WORD
+//si token->hered == 1 alors c'est un delimiteur de heredoc
+//si token->is_quote == 1 alors il y a des quotes dans le delimiteur donc pas d'expand
+/*int	need_expand_heredoc(t_token *token)
+{
+	int	i;
+
+	i = 0;
+	if (token->hered == 0)//si pas un delimiteur de heredoc
+		return (0);	
+	while (token->data[i] != '\0')
+	{
+		if (token->data[i] == '\'' || token->data[i] == '\"')
+		{
+			token->is_quote = 1;
+			return (0);//on ne doit pas expand, c'est un delimiteur avec quotes
+		}
+		i++;
+	}
+	return (1);//on doit expand, c'est un limiteur sans quotes
+}
+
+char	*expand_heredoc(t_env *minishell, t_meta *meta, char *str, t_token *token)
+{
+	if (need_expand_heredoc(token) == 1)
+		return(expand(minishell, str, meta));//on expande
+	else
+		return (str);//on ne fait ne fait rien
+}*/

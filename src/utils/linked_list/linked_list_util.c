@@ -86,7 +86,7 @@ t_list	*ft_add_list_at_begin(t_list *list, t_list *add_list)
 		last_add = last_add->next;
 	last_add->next = list;
 	if (list)
-	list->prev = last_add;
+		list->prev = last_add;
 	return (add_list);
 }
 

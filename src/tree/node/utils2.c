@@ -41,7 +41,7 @@ static int	print_error_tree(char *s, t_tree *node)
 	ft_putendl_fd(": command not found", 2);
 	if (node)
 		node->path = NULL;
-	return (127);
+	return (126);
 }
 
 // Si dans la commande on rencontre un tok_word sans redirection

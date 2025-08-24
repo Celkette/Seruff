@@ -39,7 +39,7 @@ static void	replace_var_decl_tokens(t_env *minishell, t_list *token_list)
 				minishell->found_cmd = 1;
 		}
 		if (token->type == TOK_PIPE)
-				minishell->found_cmd = 0;
+			minishell->found_cmd = 0;
 		current = next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cle-rouz <cle-rouz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/22 02:57:22 by nlaporte          #+#    #+#             */
-/*   Updated: 2025/08/21 11:57:12 by cle-rouz         ###   ########.fr       */
+/*   Updated: 2025/08/21 13:47:50 by cle-rouz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,27 +14,22 @@
 
 int	use_redir_in_here_doc(t_tree *node)
 {
-	pid_t	fork_pid;
-	int		len;
-	char	*path_p;
-
-	path_p = node->redir_in->path;
-	if (pipe(node->here_doc_fd) < 0)
-		return (print_error_pipeline("can't pipe:", strerror(errno), -1));
-	if (dup2(node->here_doc_fd[0], STDIN_FILENO) < 0)
-		return (print_error_pipeline("can 't dup2:", strerror(errno), -1));
-	len = ft_strlen(path_p);
-	if (len < 4000)
+	if (node->redir_in->type == 2)
 	{
-		write(node->here_doc_fd[1], path_p, len);
-		close(node->here_doc_fd[1]);
+		if (node->redir_in->fd < 0)
+		{
+			ft_putstr_fd(strerror(errno), 2);
+			return (1);
+		}
+		if (dup2(node->redir_in->fd, STDIN_FILENO) < 0)
+		{
+			close(node->redir_in->fd);
+			ft_putstr_fd(strerror(errno), 2);
+			return (-3);
+		}
+		close(node->redir_in->fd);
 		return (0);
 	}
-	fork_pid = fork();
-	if (fork_pid < 0)
-		return (print_error_pipeline("can't fork:", strerror(errno), -1));
-	use_redir_in_here_doc2(node, fork_pid, path_p);
-	close(node->here_doc_fd[1]);
 	return (0);
 }
 
@@ -69,9 +64,9 @@ static int	get_redir_fd_out(t_r_out *redir_out)
 	int	fd_to_redirect;
 
 	if (redir_out->type == 2)
-		fd = open(redir_out->path, O_APPEND | O_WRONLY);
+		fd = open(redir_out->path, O_APPEND | O_WRONLY | O_CLOEXEC);
 	else
-		fd = open(redir_out->path, O_TRUNC | O_WRONLY);
+		fd = open(redir_out->path, O_TRUNC | O_WRONLY | O_CLOEXEC);
 	if (fd < 0)
 	{
 		perror("open");
@@ -84,6 +79,7 @@ static int	get_redir_fd_out(t_r_out *redir_out)
 		fd_to_redirect = redir_out->fd;
 	if (dup2(fd, fd_to_redirect) == -1)
 	{
+		close(fd);
 		printf("%s\n", strerror(errno));
 		return (-2);
 	}
@@ -93,7 +89,7 @@ static int	get_redir_fd_out(t_r_out *redir_out)
 // Fere le redirection out
 int	use_redir_out(t_tree *node)
 {
-	t_r_out	*redir_out;
+	t_r_out		*redir_out;
 	t_list		*redir_list;
 	int			fd;
 

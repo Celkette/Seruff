@@ -17,13 +17,13 @@ void	fork_dup_fd(t_tree *node, int old, int neew)
 {
 	if (neew < 0 || !node || (!node->path && !node->built_in))
 	{
-		exit(-127);
+		exit(9);
 	}
 	if (dup2(old, neew) < 0)
 	{
 		ft_putstr_fd("minishell: ", 2);
 		ft_putendl_fd(strerror(errno), 2);
-		exit(-127);
+		exit(24);
 	}
 }
 

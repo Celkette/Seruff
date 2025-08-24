@@ -14,7 +14,8 @@
 
 // Si il y a une redirection dans la token commande
 // On recupere la redirection qui correspond avec les fonctions de redir.c
-int	manage_token_redir(t_list *head, t_tree *node, t_token *token)
+int	manage_token_redir(t_env *minishell, t_list *head, \
+	t_tree *node, t_token *token)
 {
 	void	*tmp;
 
@@ -23,7 +24,7 @@ int	manage_token_redir(t_list *head, t_tree *node, t_token *token)
 		return (-2);
 	if (token->type == TOK_REDIR_IN || token->type == TOK_REDIR_HEREDOC)
 	{
-		tmp = get_redir_in(head);
+		tmp = get_redir_in(minishell, head);
 		if (!tmp)
 			return (-1);
 		if (node->redir_in)
@@ -43,12 +44,13 @@ int	manage_token_redir(t_list *head, t_tree *node, t_token *token)
 	return (1);
 }
 
-static int	check_for_redir(t_list *head, t_tree *node, t_token *token)
+static int	check_for_redir(t_env *minishell, t_list *head, \
+	t_tree *node, t_token *token)
 {
 	if (token->type == TOK_REDIR_IN || token->type == TOK_REDIR_OUT || \
 		token->type == TOK_REDIR_HEREDOC || token->type == TOK_REDIR_APPEND)
 	{
-		if (manage_token_redir(head, node, token) < 0)
+		if (manage_token_redir(minishell, head, node, token) < 0)
 		{
 			free_tree(node);
 			return (-1);
@@ -82,7 +84,7 @@ static int	while_for_token(t_env *minishell, t_list *head, \
 		token = see_token(head);
 		if (!token || !is_a_valid_token(token))
 			break ;
-		code = check_for_redir(head, node, token);
+		code = check_for_redir(minishell, head, node, token);
 		if (code == -1)
 			return (-1);
 		else if (token->type == TOK_WORD)
@@ -125,5 +127,10 @@ t_tree	*create_word_node_tree(t_env *minishell, t_list *head, int *valid)
 		return (NULL);
 	has_cmd = 0;
 	*valid = while_for_token(minishell, head, &has_cmd, node);
+	if (!valid)
+	{
+		free(node);
+		return (NULL);
+	}
 	return (node);
 }

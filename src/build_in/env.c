@@ -37,17 +37,19 @@ int	env(void *p)
 	t_list	*lst;
 
 	if (!p)
-		return (-1);
+		return (1);
 	minishell = ((t_arg *)p)->minishell;
 	if (!minishell->env_list)
 	{
 		free(p);
-		return (-1);
+		return (1);
 	}
 	if (((t_arg *)p)->node && ((t_arg *)p)->node->redir_out)
-		use_redir_out(((t_arg *)p)->node);
+		if (use_redir_out(((t_arg *)p)->node) != 0)
+			return (1);
 	lst = minishell->env_list;
 	print_env_list(lst);
+	exit_minishell(((t_arg *)p)->minishell);
 	free(p);
 	return (0);
 }

@@ -43,10 +43,14 @@ int	pwd(void *p)
 			ft_putstr_fd("pwd: error retrieving current directory: getcwd: cannot \
 access parent directories: No such file or directory\n", 2);
 			if (p)
+			{
+				exit_minishell(((t_arg *)p)->minishell);
 				free(p);
+			}
 			return (ENOENT);
 		}
 	}
+	exit_minishell(((t_arg *)p)->minishell);
 	if (p)
 		free(p);
 	printf("%s\n", buf);

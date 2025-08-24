@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
+#include <unistd.h>
 
 // Creer une redirection out a partir dune liste de tokens
 // set le fd de la redirection a -1 pour 
@@ -48,50 +49,93 @@ t_r_out	*get_redir_out(t_list *head)
 	return (redir_out);
 }
 
-static void	get_redir_in_here_doc2(t_r_in *redir_in, \
-	char *buf, char *buf2, char *s)
+static char	*fork_heredoc_expand(t_env *minishell, \
+	t_meta *meta, t_token *token, char *s)
 {
-	buf2 = ft_strndup(buf, ft_strlen(buf));
-	if (buf)
-		free(buf);
-	buf = ft_strjoin(buf2, s);
-	free(s);
-	if (buf2)
-		free(buf2);
-	buf2 = ft_strjoin(buf, "\n");
-	free(buf);
-	buf = ft_strjoin(redir_in->path, buf2);
-	free(buf2);
-	if (redir_in->path)
-		free(redir_in->path);
-	redir_in->path = ft_strndup(buf, ft_strlen(buf));
-	free(buf);
+	char	*new_str;
+
+	if (!minishell || !meta || !token || !s || !*s)
+		return (NULL);
+	if (token->is_quote == 0)
+	{
+		new_str = expand(minishell, s, meta);
+		free(s);
+	}
+	else
+		new_str = s;
+	return (new_str);
 }
 
-void	get_redir_in_here_doc(t_list *head, t_r_in *redir_in)
+static void	fork_heredoc(t_env *minishell, t_r_in *redir_in, t_token *token)
 {
+	int		fd;
 	char	*s;
-	char	*buf;
-	char	*buf2;
-	t_token	*token;
 
-	token = consume_token(head);
-	g_readline.hd_active = 1;
-	while (g_readline.hd_active)
+	if (access(redir_in->path, W_OK) == 0)
+		fd = open(redir_in->path, O_WRONLY, 0644);
+	else
+		fd = open(redir_in->path, O_CREAT | O_EXCL | O_WRONLY | O_TRUNC, 0644);
+	if (fd < 0)
+		(fprintf(stderr, "erro = %s\n", strerror(errno)), exit(0));
+	signal(SIGINT, sigin_handler_heredoc);
+	while (1)
 	{
 		s = readline("> ");
 		if (s)
 		{
-			if (ft_strncmp(s, (char *)token->data, \
-			ft_strlen((char *)token->data)) == 0 && \
-			ft_strlen((char *)token->data) == ft_strlen(s))
-			{
-				free(s);
+			if (ft_strncmp(s, (char *)token->data, ft_strlen(token->data)) \
+	== 0 && ft_strlen(token->data) == ft_strlen(s) && (free(s), 1))
 				break ;
-			}
-			buf = NULL;
-			buf2 = NULL;
-			get_redir_in_here_doc2(redir_in, buf, buf2, s);
+			s = fork_heredoc_expand(minishell, minishell->meta, token, s);
+			(write(fd, s, ft_strlen(s)), write(fd, "\n", 1), free(s));
 		}
 	}
+	(close(fd), free(redir_in->path), free(redir_in), \
+		exit_minishell(minishell), exit(0));
+}
+
+char	*get_file_name(void)
+{
+	int		fd;
+	char	*buf;
+
+	buf = malloc(sizeof(char) * 20);
+	if (!buf)
+		return (NULL);
+	fd = open("/dev/random", O_RDONLY);
+	if (fd < 0)
+	{
+		free(buf);
+		return (NULL);
+	}
+	if (read(fd, buf, 19) == -1)
+	{
+		free(buf);
+		close(fd);
+		return (NULL);
+	}
+	close(fd);
+	buf[19] = 0;
+	return (buf);
+}
+
+void	get_redir_in_here_doc(t_env *minishell, t_list *head, t_r_in *redir_in)
+{
+	pid_t	proc;
+	t_token	*token;
+	int		code;
+
+	code = 0;
+	token = consume_token(head);
+	redir_in->path = get_file_name();
+	proc = fork();
+	if (proc < 0)
+		return ;
+	else if (proc == 0)
+		fork_heredoc(minishell, redir_in, token);
+	if (redir_in->fd < 0)
+		return ;
+	waitpid(proc, &code, 0);
+	redir_in->fd = open(redir_in->path, O_RDONLY, 0644);
+	unlink(redir_in->path);
 }

@@ -10,8 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include<stddef.h>
-#include<stdlib.h>
 #include "../headers/minishell.h"
 
 char	*ft_strdup(const char *src)

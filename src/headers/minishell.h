@@ -38,7 +38,7 @@
 # include <sys/wait.h>
 # include <dirent.h> // Pour le type DIR
 
-extern int	g_readline;
+extern volatile sig_atomic_t exit_code;
 
 #endif
 

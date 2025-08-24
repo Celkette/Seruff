@@ -127,6 +127,7 @@ char	*check_which_expand(t_env *minishell, char *str, t_meta *meta, int *i)
 	char	*new_str;
 	int		res;
 
+	new_str = NULL;
 	res = is_expand_ok(str, meta, *i);
 	if (res == 1)
 		new_str = str;
