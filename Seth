@@ -1,0 +1,4 @@
+Patch segfault lors de la suppression de _ dans env
+Suppression des fuites memoires dans heredocs (un peu de la triche)
+Modification de la gestion des heredocs lorsqu'il y en a plusieurs
+Modification du message Quit core dumped
